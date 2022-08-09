@@ -1,0 +1,174 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'home-main.css'%}">
+    <title>Home</title>
+</head>
+<body>
+    <div id="headere">
+        <div id="buttlogo">
+            <div id="mm">
+                <button id="change">
+                    <div class="span"></div>
+                    <div class="span"></div>
+                    <div class="span"></div>
+                 </button>
+                 <div id="study-div">
+                    <h2 id="study">BloomChat</h2>
+                </div>
+             </div>         
+        </div>
+        <div id="search-div">
+            <input id="search" type="text" placeholder="search">
+        </div id="ppp">
+         <div id="header2">
+             {%if user.is_authenticated%}
+             <div id="profile"><img src="{{user.profile.image.url}}"></div>
+             {%endif%}
+             {%if user.is_authenticated%}
+             <a id="login" href="{% url 'logout' %}">logout</a>
+             {%else%}
+             <a id="login" href="{% url 'login' %}">login</a>
+             {%endif%}
+         </div>
+    </div>
+    <div id="below-header">
+        <div id="but1">
+            {%if user.is_authenticated%}
+           <a href="{% url 'profile' user.profile.slug %}" id="toprofile"><button class="safe" id="unknown">View Profile</button></a>
+           {%else%}
+           <a href="profile" id="toprofile"><button class="safe" id="unknown">View Profile</button></a>
+           {%endif%}
+        </div>
+        <div id="but2">
+            <button  class="safe" id="save">Recent Posts</button>
+        </div>
+    </div>       
+    </div>
+    <div id="main">
+        <div id="top">
+            <div id="all-rooms">
+                <div id="room-details">
+                    <h3>ROOMS</h3>
+                    <h4>{{rooms.count}} Rooms Availabe</h4>
+                    <h5>All rooms</h5>
+                </div>
+                {% if user.is_authenticated %}
+                <div id="create">
+                    <a id="a" href="create">CreateRoom</a>
+                </div>
+                {%endif%}
+            </div>
+            {% for room in rooms%}
+            <div class="room-description">
+                <div class="message-top">
+                    <div class="host-pic uper"><img src="{{room.host.profile.image.url}}"></div>
+                    <div class="host-name uper"><a href="profile-view/{{room.host.profile.slug}}" id="newlink">{{room.host.first_name}} {{room.host.last_name}}</a></div>
+                    <div class="day-posted">
+                        {%if room.updated%}
+                        {{room.created|timesince}} ago
+                        <h3 class="last_updated">last updated {{room.updated|timesince}} ago<h3>
+                        {% else %}
+                        {{room.created|timesince}} ago
+                        {%endif%}
+                    </div>
+                </div>  
+                <div class="group-desc "><a href="{% url 'room-view' room.slug%}">{{room.title}}</a>
+                </div>
+                <div class="group-desc group-icons">
+                    {% for objects in room.participants.all%}
+                    {% if forloop.counter > 6 %}
+                    {%else%}
+                    {%if objects != room.host%}                
+                    <div><img src="{{objects.profile.image.url}}"></div>
+                    {%endif%}
+                    {%endif%}
+                    {%endfor%}
+              
+                </div>
+                <div class="line"></div>
+                <div class="pat-no">
+                    <div class="number">{{room.participants.all.count}} participants</div>
+                    <div class="topp"><h4>{{room.topic.name}}</h4></div>
+                </div>   
+            </div>
+            {%endfor%}
+        </div>
+
+        <div id="center">
+          <div class="side-create-div">
+            <h4 class="center-create"><a href="/create-topic" class="create-link">Create new topic +</a></h4>   
+          </div> 
+          <div class="all-rooms">
+            <h4><a href="/" class="create-link">All Rooms</a></h4>
+            <h4>{{rooms.count}}</h4>
+          </div>
+          <div class="side-trends">
+                <div class="side-create-div">
+                  <h4 class="center-create" id="side-trending"><a href="#" class="create-link">Trending Topics</a></h4>   
+                </div>
+                {% for entry in trending%}
+                <div class="side-top-trend all-rooms">
+                    <h4>{{entry.name}}</h4>
+                    <h4><a href="/?q={{entry.name}}" class="create-link">Filter</a></h4>
+                </div>
+                {%endfor%}
+              
+           </div> 
+            <div class="side-trends">
+                <div class="side-create-div">
+                  <h4 class="center-create" id="side-trending"><a href="#" class="create-link">All Topics</a></h4>   
+                </div>
+                {%for topic in topics%}
+                <div class="side-top-trend all-rooms">
+                    <h4>{{topic.name}}</h4>
+                    <h4><a href="?q={{topic.name}}" class="create-link">Filter</a></h4>
+                </div>
+                {%endfor%}
+            </div>              
+        </div>  
+              
+        <div id ="third">
+            <div id="close-div">
+                    <button id="close">X</button>
+            </div>
+            <div class="third-main">
+                <div class="third-header">
+                    <h4>Active Participants</h4>
+                </div>
+                {% for pat in toppers%}
+                <div class="top-host-div">
+                    <div class="top-host-pic"><img src="{{pat.profile.image.url}}" alt=""></div>
+                    <div class="top-host-name"><a href="#a">{{pat.first_name}} {{pat.last_name}}</a></div>
+                    <div class="top-host-follow"><a href="/profile-view/{{pat.profile.slug}}">View Profile</a></div>
+                </div>
+                {%endfor%}
+                            </div>
+            <div class="third-activity third-main">
+                <div class="third-header">
+                    <h4>Recent Activities</h4>
+                </div>
+                <div class="activity-main">
+                    {%for activity in latest%}
+                    <div class="activity-list">
+                        <div class="activity-list-top">
+                            <div class="activity-pic"><img src="{{activity.user.profile.image.url}}" alt=""></div>
+                            <div class="activity-name"><a href="/pofile-view/{{activity.profile.slug}}" id="activity-linkd">@{{activity.user.username}}</a></div>
+                        </div>
+                        <h4>{{activity.display}}</h4>
+                        <h5 id="nownow"><a href="{{activity.link}}" id="activity-linkd">Click to View</a></h5>
+                        <h5 class="note-time">{{activity.created|timesince}} ago</h5>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/home.js'%}"></script>
+</body>
+</html>

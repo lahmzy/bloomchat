@@ -1,0 +1,58 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'home.css'%}">
+    <title>Document</title>
+</head>
+<body>
+    <div id="headere">
+        <div id="buttlogo">
+            <div id="mm">
+                <button id="change">
+                    <div class="span"></div>
+                    <div class="span"></div>
+                    <div class="span"></div>
+                 </button>
+                 <div id="study-div">
+                    <h2 id="study">Study Bud</h2>
+                </div>
+             </div>         
+        </div>
+        <div id="search-div">
+            <input id="search" type="text" placeholder="search">
+        </div id="ppp">
+         <div id="header2">
+             <div id="profile"></div>
+             <a id="login" href="#">login</a>
+         </div>
+    </div>
+    <div id="below-header">
+        <div id="but1">
+            <button class="safe" id="unknown">unknown</button>
+        </div>
+        <div id="but2">
+            <button  class="safe" id="save">Recent Posts</button>
+        </div>
+    </div>       
+    </div>
+    <div id="main">
+        <div id="top">up</div>
+        <div id="center">
+            <div id="recent-div" style="display:none">
+                <button id="recent">Recent actions</button>
+            </div>
+        </div>
+        <div id ="third">
+            <div id="close-div">
+                <button id="close">X</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/home.js' %}"></script>
+</body>
+</html>

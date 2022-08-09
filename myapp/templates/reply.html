@@ -1,0 +1,57 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'reply-main.css'%}">
+    <title>Replies</title>
+</head>
+<body>
+    <div id="header">
+        <h3><a href="/chatroom/{{message.room.slug}}" id="back-link">Back</a></h3>
+        <div id="profile-pic"><img src="{{user.profile.image.url}}" alt=""></div>
+    </div>
+    <div id="message">
+        <div class="message-pic">
+            <div id="real-pic"><img src="{{message.message_by.profile.image.url}}" alt=""></div>
+        </div>
+        <div id="content">
+            <h4 id="ddd"><a href="/profile-view/{{message.message_by.profile.slug}}" class="new-link">{{message.message_by.username}}</a></h4>
+            <h4>{{message.body}}</h4>
+            <h5>{{message.created|timesince}} ago</h5>
+        </div>
+    </div>
+    <div>
+        <div id="comment-div">
+            <h4 id="alll">All replies ({{replies.count}})</h4>
+            {%for reply in replies%}
+            {%if user == reply.reply_by%}
+            <div class="edit-divs">
+                <h3 class="edits"><a href="/edit-reply/{{reply.slug}}/{{message.slug}}" class="last-links">Edit</a></h3>
+                <h3 id="delete" > <a href="/delete-reply/{{reply.slug}}/{{message.slug}}" class="last-links">Delete</a></h3>
+            </div>
+            {%endif%}
+            <div class="comments">
+                <div class="message-pic">
+                    <div class ="comments-pic"><img src="{{reply.reply_by.profile.image.url}}" alt=""></div>
+                </div>
+               <div class="comments-content">
+                    <h4><a class="new-link" href="/profile-view/{{reply.reply_by.profile.slug}}">{{reply.reply_by.username}}</a></h4>
+                    <p>{{reply.body}}</p>
+                    <h5>{{reply.created|timesince}} ago</h5>
+               </div>
+            </div> 
+            {%endfor%}          
+        </div>
+        {% if user.is_authenticated%}
+        <form action="/create-reply/{{message.slug}}" method="POST">
+        {% csrf_token %}
+            <textarea rows="3" cols="40" name="text"></textarea>
+            <button>Submit</button>
+        </form>
+        {%endif%}
+    </div>
+</body>
+</html>

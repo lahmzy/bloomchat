@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'edit-reply.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+    <form method="POST" action="">
+        <h3 id="headd">Edit your Reply</h3>
+    {%for field in form%}
+    {% csrf_token %}
+    <div class="control-div">
+        {{field.label_tag}}
+        {{field}}
+        {{field.errors}}
+      </div>
+    {%endfor%}
+    <div class="submit-div">
+        <button>Submit</button>
+    </div>
+    </div>
+</body>
+</html>

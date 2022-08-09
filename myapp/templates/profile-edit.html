@@ -1,0 +1,44 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{%static 'profile-edit.css'%}">
+</head>
+<body>
+    <div class="container">
+    <h2 class="edit">Edit You Profile</h2>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="control-div">
+            <label for="first">Update First Name</label>
+            <input type="text" id="first" name="firstname" value="{{profile.profile.first_name}}">   
+        </div>
+        <div class="control-div">
+            <label for="last">Update Last Name</label>
+            <input type="text" id="last" name="lastname" value="{{profile.profile.last_name}}">
+        </div>
+    
+        <div class="image-div">
+            <img src="{{profile.image.url}}" alt="">
+        </div>
+
+        <div class="control-div">
+            <label for="profile_image">Update Profile Image</label>
+            <input type="file" id="profile_image" name="image">
+        </div>
+        <div class="control-div">
+            <label for="cover_image">Update Cover Image</label>
+            <input type="file" id="cover_image" name="cover">
+        </div>
+        <div class="button-div">
+            <button>Submit</button>
+        </div>
+  
+    </form>
+    <div>
+</body>
+</html>

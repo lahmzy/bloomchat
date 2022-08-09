@@ -1,0 +1,84 @@
+:root{
+    --dark:#140d30;
+    --white:whitesmoke;
+    --blue:rgb(0, 140, 255);
+    --black:rgb(8, 1, 20);
+    --violet:rgb(211, 43, 226);
+    --pink:rgb(245, 18, 86);
+    --dark-light:rgb(118, 131, 131);
+}
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    background:var(--dark);
+    color:white;
+
+}
+.container{
+    border-radius:8px;
+    background-color:rgba(255, 255, 255, 0.056);
+    box-shadow:2px 2px rgba(255, 255, 255, 0.692);
+}
+/* div{
+    border:0.2px solid grey
+} */
+.header{
+    display:flex;
+    justify-content:center;
+    height:50px;
+    margin-bottom:20px;
+}
+.connect{
+    margin-bottom:10px;
+}
+.control-div{
+    display:flex;
+    justify-content:space-between;
+    font-size:1.1rem;
+    margin:5px 30px 5px 30px;
+  
+}
+.control-div input{
+    border:none;
+    width:70%;
+    color:white;
+    background-color:transparent;
+}
+.control-div:hover{
+   border:1px solid var(--blue);
+}
+.control-div input:focus{
+    border:none;
+}
+#id_password2{
+    width:50%;
+}
+
+.submit-div{
+    display:flex;
+    justify-content:center;
+    margin:10px auto;
+}
+.submit-div>button{
+    border-radius:6px;
+    padding:5px 10px 5px 10px;
+    background:var(--blue);
+    font-size:1.2rem;
+    color:var(--white);
+    border:none;
+}
+.error-class{
+    text-align:center;
+    color:red;
+    margin:2px;
+    font-size:1rem;
+}
+.signup>h3>a{
+    text-decoration:none;
+    color:var(--blue)
+}
+.signup>h3{
+    margin-left:10px;
+}

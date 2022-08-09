@@ -1,0 +1,157 @@
+from django.db import models
+from django.utils.text import slugify
+from django.contrib.auth.models import User
+from . import helper
+
+# Create your models here.
+class Topic(models.Model):
+    name=models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.name
+
+class Room(models.Model):    
+    name=models.CharField(max_length=1000)
+    topic=models.ForeignKey(Topic,on_delete=models.SET_NULL,null=True,blank=True,related_name="topic")
+    host=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name="host")
+    title=models.CharField(max_length=10000)
+    created=models.DateTimeField(auto_now_add=True)
+    updated=models.DateTimeField(auto_now=True)
+    participants=models.ManyToManyField(User,related_name="participants",blank=True)
+    slug=models.SlugField(default="",null=True)
+
+    def __str__(self):
+        return self.name
+
+    def save(self,*args,**kwargs):
+        self.slug=slugify(helper.randoms() + " " + self.name)
+        super().save(*args,**kwargs)
+
+class Message(models.Model):
+    message_by=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name="message_by")
+    body=models.CharField(max_length=10000)
+    created=models.DateTimeField(auto_now_add=True)
+    updated=models.DateTimeField(auto_now=True)
+    room = models.ForeignKey(Room,on_delete=models.CASCADE,related_name="room")
+    slug=models.SlugField(default="",null=True)
+
+    def save(self,*args,**kwargs):
+        self.slug=slugify(helper.randoms() + "" + self.message_by )
+        super().save(*args,**kwargs)
+
+    def __str__(self):
+        return self.body
+
+class Reply(models.Model):
+    reply_by=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name="reply_by")
+    body=models.CharField(max_length=10000)
+    created=models.DateTimeField(auto_now_add=True)
+    updated=models.DateTimeField(auto_now=True)
+    message=models.ForeignKey(Message,on_delete=models.CASCADE,related_name="replies",null=True)
+    slug=models.SlugField(default="",null=True)
+
+    def save(self,*args,**kwargs):
+        self.slug=slugify(helper.randoms() + "" + self.reply_by )
+        super().save(*args,**kwargs)
+
+    class Meta:
+        verbose_name_plural="Replies"
+
+    
+
+class Profile(models.Model):
+    profile=models.OneToOneField(User,on_delete=models.CASCADE,related_name="r_profile")
+    image=models.ImageField(upload_to="xmedia")
+    followers=models.ManyToManyField(User,related_name="followers")
+    following=models.ManyToManyField(User,related_name="following")
+    mail=models.CharField(max_length=1000)
+
+from django.shortcuts import render,redirect
+from .models import Topic,Room,Reply,Profile,Message
+from django.views import View
+from .forms import loginForm,CreateRoomForm
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
+from django.contrib import messages
+from django.urls import reverse
+# Create your views here.
+
+def home(request):
+    rooms=Room.objects.all().order_by("-created")
+    context={
+        "rooms":rooms
+    }
+    return render(request,"home.html",context)
+
+def loginpage(request):
+    if request.method == "POST":
+        form=loginForm(request.POST)
+        if form.is_valid():
+            inputs=form.cleaned_data
+            username=inputs["username"]
+            password=inputs["password"]
+            user=authenticate(username=username,password=password)
+            if user is not None:
+                login(request,user)
+                return redirect(reverse("home"))
+            else:
+                # messages.info(request,"Credentials Invalid")
+                context={
+                "form":form,
+                "none":True,
+            }
+                return render(request,"forms.html",context)
+        else:
+            context={
+                "form":form
+            }
+            return render(request,"forms.html",context)
+    
+    else:
+        context={
+            "form":loginForm()
+        }
+        return render(request,"forms.html",context)
+
+
+def logoutpage(request):
+    logout(request)
+    return redirect(reverse("home"))
+
+def create_room(request):
+    if request.method=="POST":
+        form=CreateRoomForm(request.POST)
+        if form.is_valid():
+            data=form.cleaned_data
+            name=data["Room_Name"]
+            topic_name=data["Topic"]
+            title=data["Add_Description"]
+            topic=Topic.objects.get(name=topic_name)
+            host=request.user
+            new_room=Room(name=name,topic=topic,host=host,title=title)
+            new_room.save()
+            new_room.participants.add(host,)
+            new_room.save()
+            return redirect(reverse("home"))
+        else:
+            context={
+             "form":form
+             }
+            return render(request,"room.create.html",context)
+    else:
+         form=CreateRoomForm()
+         context={
+             "form":form
+         }
+         return render(request,"room_create.html",context)
+
+
+
+
+
+
+
+
+
+
+

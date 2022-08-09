@@ -1,0 +1,202 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href={%static 'room-main.css' %}>
+    <title>Chat Room</title>
+</head>
+<body>
+    <div id="headere">
+        <div id="buttlogo">
+            <div id="mm">
+                <button id="change">
+                    <div class="span"></div>
+                    <div class="span"></div>
+                    <div class="span"></div>
+                 </button>
+                 <div id="study-div">
+                    <h2 id="study">BloomChat</h2>
+                </div>
+             </div>         
+        </div>
+        <div id="search-div">
+            <input id="search" type="text" placeholder="search">
+        </div id="ppp">
+         <div id="header2">
+            {%if user.is_authenticated%}
+            <div id="profile"><img src="{{user.profile.image.url}}"></div>
+            {%endif%}
+             {% if user.is_authenticated%}
+             <a id="login" href="{% url 'logout' %}">logout</a>
+             {%else%}
+             <a id="login" href="{% url 'logout' %}">login</a>
+             {%endif%}
+         </div>
+    </div>
+    <div id="below-header">
+        <div id="but1">
+            {%if user.is_authenticated%}
+           <a href="{% url 'profile' user.profile.slug %}" id="toprofile"><button class="safe" id="unknown">View Profile</button></a>
+           {%else%}
+           <a href="/profile" id="toprofile"><button class="safe" id="unknown">View Profile</button></a>
+           {%endif%}
+        </div>
+        <div id="but2">
+            <button  class="safe" id="save">Recent Posts</button>
+        </div>
+    </div>       
+    </div>
+    <div id="main">
+        <div id="top">
+           <div id="desc-all">
+                <div id="desc-all-top">
+                    <h4 id="desc-back"><a id="bback" href="/" >Home</a></h4>
+                    <h3 id="desc-comm">{{room.name}}</h3>
+                    {% if user in room.participants.all%}
+                    <a href="{% url 'leave' room.slug %}" id="desc-join"><button>Exit</button></a>
+                    {% else %}
+                    <a href="{% url 'join' room.slug %}" id="desc-join"><button>Join</button></a>
+                    {% endif %}
+                </div>
+                <div id="desc-desc">
+                    <h4>Room Description</h4>
+                </div> 
+                <div id="desc-description-content">{{room.title}}</h4>
+                </div>
+                <div id="desc-main">
+                    <div id="desc-main-host-pic"><img src="{{room.host.profile.image.url}}" alt=""></div>
+                    <h5 id="desc-main-h5"><a href="/profile-view/{{room.host.profile.slug}}" id="roomm-host" >hosted by {{room.host.first_name}} {{room.host.last_name}}</a></h5>
+                    <h5 id="desc-main-time">Room Created {{room.created|timesince}} ago</h5>
+                </div>
+                {% if user == room.host %}
+                <div id="desc-button">
+                    <a class="desc-edit-button" href="#submit-message"><button>Send a message</button></a>
+                    <a class="desc-edit-button" href="/edit-room/{{room.slug}}"><button>Edit Room</button></a>
+                    <button class="desc-edit-button" id="myybut">Delete Room</button>
+                </div>
+                {%else%}
+                {%if user in room.participants.all%}
+                <div id="desc-button">
+                    <a class="desc-edit-button" href="#submit-message"><button>Send a message</button></a>
+                </div>
+                {%endif%}
+                {% endif %}
+                <div id="check" class="delete_confirm">
+                    <h3>Are You Sure you want to delete This Room</h3>
+                    <div id="checkbutton">
+                        <a href="{% url 'delete-room' room.slug %}"><button id="yes">Yes</button></a>
+                        <button id="no">No</button>  
+                    </div>              
+                </div>
+                <div id="desc-parent-div">
+                    {% for message in messages%}
+                    <div class="desc-redit">
+                        {% if user != message.message_by %}
+                        <a href="/replies/{{message.slug}}"><buttons id="desc-reply">Reply Comment</buttons></a>
+                        {% endif %}
+                        {% if user == message.message_by %}
+                        <a href="/replies/{{message.slug}}"><buttons id="desc-reply">View Reply</buttons></a>
+                        <a href="{% url 'edit-room' message.slug room.slug %}"><buttons id="desc-edit">Edit </buttons></a>
+                        <a href="{% url 'delete-message' message.slug%}"><buttons id="desc-delete">Delete</buttons></a>
+                        {%endif%}
+                    </div> 
+                    <div class="desc-messages">
+                        <div class="desc-sender-pic">
+                            <div class="realpic"><img src="{{message.message_by.profile.image.url}}" alt=""></div>
+                        </div>
+                        <div class="desc-sender-content"><h5 class="sender-name">
+                            <a href="/profile-view/{{message.message_by.profile.slug}}">{{message.message_by.first_name}} {{message.message_by.last_name}}</a></h5><p>{{message.body}}</p>
+                        </div>
+                        <div class="desc-time-posted"><h5>{{message.created|timesince}} ago</h5></div>
+                    </div>
+                    {%endfor%}
+                </div> 
+                <div>
+                    {%if user in room.participants.all%}
+                    <form method="POST" action="{% url 'create-message' room.slug%}">
+                    {%csrf_token%}
+                        <div id="submit-message" >
+                            <textarea name="body" rows="3" cols="30" type="text" placeholder="Leave a message"></textarea>
+                            <button>Submit</button>
+                        </div>
+                    </form>
+                    {%endif%}
+                </div>                         
+            </div>
+        </div>
+        <div id="center">
+            <div class="side-create-div">
+                <h4 class="center-create"><a href="/create-topic" class="create-link">Create new topic +</a></h4>   
+              </div> 
+              <div class="all-rooms">
+                <h4><a href="#" class="create-link">All Rooms</a></h4>
+                <h4>150</h4>
+              </div>
+              <div class="side-trends">
+                <div class="side-create-div">
+                  <h4 class="center-create" id="side-trending"><a href="#" class="create-link">Trending Topics</a></h4>   
+                </div>
+                {% for entry in trending%}
+                <div class="side-top-trend all-rooms">
+                    <h4>{{entry.name}}</h4>
+                    <h4><a href="/?q={{entry.name}}" class="create-link">Filter</a></h4>
+                </div>
+                {%endfor%}          
+           </div> 
+            <div class="side-trends">
+                <div class="side-create-div">
+                  <h4 class="center-create" id="side-trending"><a href="#" class="create-link">All Topics</a></h4>   
+                </div>
+                {%for topic in topics%}
+                <div class="side-top-trend all-rooms">
+                    <h4>{{topic.name}}</h4>
+                    <h4><a href="/?q={{topic.name}}" class="create-link">Filter</a></h4>
+                </div>
+                {%endfor%}
+            </div>              
+ 
+
+        </div>
+        <div id ="third">
+            <div id="close-div">
+                    <button id="close">X</button>
+            </div>
+            <div class="third-main">
+                <div class="third-header">
+                    <h4>Top Hosts</h4>
+                </div>
+                {% for pat in toppers%}
+                <div class="top-host-div">
+                    <div class="top-host-pic"><img src="{{pat.profile.image.url}}" alt=""></div>
+                    <div class="top-host-name"><a href="#a">{{pat.first_name}} {{pat.last_name}}</a></div>
+                    <div class="top-host-follow"><a href="/profile-view/{{pat.profile.slug}}">View Profile</a></div>
+                </div>
+                {%endfor%}
+            </div>
+            <div class="third-activity third-main">
+                <div class="third-header">
+                    <h4>Recent Activities</h4>
+                </div>
+                <div class="activity-main">
+                    {%for activity in latest%}
+                    <div class="activity-list">
+                        <div class="activity-list-top">
+                            <div class="activity-pic"><img src="{{activity.user.profile.image.url}}" alt=""></div>
+                            <div class="activity-name"><a href="/profile-view/{{activity.user.profile.slug}}" id="nownow">@{{activity.user.username}}</a></div>
+                        </div>
+                        <h4>{{activity.display}}</h4>
+                        <h5 id="adfs"><a href="{{activity.link}}" id="nownow">Click to View</a></h5>
+                        <h5 class="note-time">{{activity.created|timesince}} ago</h5>
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{% static 'js/room.js'%}"></script>
+</body>
+</html>

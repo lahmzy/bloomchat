@@ -1,0 +1,118 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'profile2.css'%}">
+    <title>Profile View</title>
+</head>
+<body>
+    <div id="search-bar">
+        <h3 id="homeview"><a class="top-links" href="{{request.META.HTTP_REFERER}}">Back</a></h3>
+        <h3 id="homeview"><a class="top-links" href="/">Home</a></h3>
+        {% if edit %}
+        <form action="/profile-search/{{profile.slug}}" method="POST">
+        {% csrf_token %}
+            <input id="top-search" type="text" placeholder="search profile" name="search">
+            <button id="searchh" type="submit">Search</button>
+        </form>        
+        <h3><a id="profile-logout" class="toplinks" href="{% url 'logout' %}">logout</a><h3>
+        {%else%}
+        {%if unfollow %}
+        <form action="/private-mesage/{{profile.slug}}" method="POST">
+            {% csrf_token %}
+                <input id="top-search" type="text" placeholder="Send a personal Message" name="private">
+                <button id="searchh" type="submit">Send</button>
+            </form>
+            {%endif%}
+        {%endif%}
+    </div>
+    <div id="cover-image"><img id="special-image" src="{{profile.cover_image.url}}" alt=""></div>
+    <div id="profile-image"><img src="{{profile.image.url}}"></div>
+    <div id="user-details">
+        <h2>{{profile.profile.username}}</h2>
+        <h4>{{profile.profile.email}}</h4>
+        <h5 id="mini-name">{{profile.profile.first_name}} {{profile.profile.last_name}}</h5>
+        {% if edit%}
+        <div id="user-edit"><a href="/edit-profile/{{profile.slug}}"><button>Edit Profile</button></a></div>
+        {%else%}
+        {%if unfollow %}
+        <div id="user-edit"><a href="/unfollow/{{profile.slug}}"><button>Unfollow</button></a></div>
+        {%else%}
+        <div id="user-edit"><a href="/follow/{{profile.slug}}"><button>Follow</button></a></div>
+        {%endif%}
+        {%endif%}
+    </div>
+    <div id="participation">
+        <h4 id="fol1">{{profile.following.all.count}} Following</h4>
+        <h4 id="fol2">{{profile.followers.all.count}} followers</h4>
+        <h4 id="fol3">{{profile.residence}}</h4>
+        <h4 id="fol4">Joined {{profile.created}}</h4>
+    </div>
+    <div id="buttons-div">
+        <button id="rooms">Rooms</button>
+        <button id="messages">Messages</button>
+        {%if edit %}
+        <button id="replies">Private Messages</button>  
+        <button id="notifications">Notifications</button>  
+        {%endif%} 
+    </div>                                
+    <div class="switch-divs" id="rooms-div">
+        <h3>{{profile.profile.participants.all.count}} Rooms Joined</h3>
+        {%for room in profile.profile.participants.all%}
+        <div>
+            <h4>Room Topic:{{room.topic}}</h4>
+            <h4>Room Name:{{room.name}}</h4>
+            <h5>Room Partcipants:{{room.participants.all.count}}</h5>
+            <h5>{{room.created|timesince}}</h5>
+            <div class="host_profile_pic"><img src="{{room.host.profile.image.url}}" alt=""></div>
+            <h5 class="host_profile_name">{{room.host.first_name}} {{room.host.last_name}}</h5>
+            <h5 class="room-link"><a href="/chatroom/{{room.slug}}" id="roomlink">Click To view Room</a></h5>
+        </div>
+        {% endfor%}                
+    </div>
+    <div class="switch-divs" id="messages-div">
+            <h4>Total Numbers Messages:{{profile.profile.message_by.all.count}}</h4>
+            {% for message in profile.profile.message_by.all%}
+            <div>
+                <h4>commented on Room {{message.room.name}}</h4>
+                <h4>{{message.body|truncatewords:10}}</h4>
+                <h5>Room Partcipants:{{message.room.participants.all.count}}</h5>
+                <h5>{{message.created|timesince}} ago<h5>
+                <h5 class="room-link" id="message"><a href="/chatroom/{{message.room.slug}}" id="roomlink">Click To view Room</a></h5>
+            </div> 
+            {%endfor%}
+    </div>                                                                                       
+    <div class="switch-divs" id="replies-div">
+        {% for dm in profile.private.all%}
+        <div>
+            <h4>{{dm.sender.first_name}} {{dm.sender.last_name}} Sent You A Message</h4>
+            <h5>{{dm.created|timesince}}</h5>
+            <div class="host_profile_pic"><img src="{{dm.sender.profile.image.url}}" alt=""></div>
+            <h3>{{dm.content}}</h3>
+            <h5 class="room-link"><a href="/profile-view/{{dm.sender.profile.slug}}" id="reply-link">Click To view</a></h5>
+        </div> 
+        {%endfor%}
+    </div>
+    
+    <div class="switch-divs" id="notifications-div">
+        <h2>My Notifications</h2>
+            {% for note in profile.notifications.all%}
+            <div id="note-main">
+                <div id="notee-div`">
+                    <div class="host_profile_pic"><img src="{{note.sender.profile.image.url}}" alt=""></div>
+                </div>
+                <div id="notee-div2">                
+                    <h4>{{note.content}}</h4>
+                    <h5 class="nottes">{{note.time_sent|timesince}} ago</h5>
+                    <h5 class="nottes" id="message"><a href="{{note.link}}" id="roomlink">Click To view</a></h5>
+                </div>
+           </div> 
+           {%endfor%}
+    </div>
+<script src="{% static 'js/profile.js' %}"></script>
+</body>
+
+                                         

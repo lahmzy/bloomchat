@@ -1,0 +1,41 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{%static 'login-main.css' %}">
+</head>
+<body>
+    <div class="container" >
+        <div class="header">
+            <h1>Log in</h1>
+        </div>
+        <div class="header connect">
+            <h4>Connect With friends on BloomChat</h4>
+        </div>
+        <form action="" method="POST">
+        {%if back%}
+        <h4 class="error-class">Credentials Invalid</h4>
+        {%endif%}
+        {% csrf_token %}
+          {%for field in form%}
+          <div class="control-div">
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors}}
+          </div>
+          {%endfor%}
+        <div class="submit-div">
+            <button>Log in</button>
+        </div>
+        </form>
+        <div class="header connect signup">
+            <h4>Dont have account yet?</h4>
+            <h3><a href="/signup">sign Up</a></h3>
+        </div>
+    </div>
+</body>
+</html>

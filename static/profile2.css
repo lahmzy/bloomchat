@@ -1,0 +1,260 @@
+:root{
+    --dark:#140d30;
+    --white:whitesmoke;
+    --blue:rgb(0, 140, 255);
+    --black:rgb(8, 1, 20);
+    --violet:rgb(211, 43, 226);
+    --pink:rgb(245, 18, 86);
+    --dark-light:rgb(118, 131, 131);
+}
+img{
+    height:100%;
+    width:100%;
+    border-radius:50%;
+    object-fit:cover;
+}
+#special-image{
+    height:100%;
+    width:100%;
+    object-fit:cover;
+    border-radius:0%;
+}
+*{
+    margin:0;
+    box-sizing:border-box;
+}
+body{
+    min-height:100vh;
+    height:auto;
+    background:var(--black);
+    color:var(--white)
+}
+#searchh{
+    display:none;
+}
+#search-bar{
+    display:flex;
+    align-items:center;
+    height:8vh;
+    background-color: var(--dark);
+}
+#search-bar>form{
+    width:auto;
+    margin-right:auto;
+    margin-left:auto;
+    border:0.5px solid black
+}
+#search-bar>form>input{
+    height:6vh;
+    width:40vw;
+    font-size:1.2rem;
+    color:var(--white);
+    border-radius:6px;
+    /* border:none; */
+    background:var(--dark-light)
+}
+#search-bar>form>button{
+    margin-left:5vw;
+    color:var(--white);
+    font-size:1.1rem;
+    padding:2px 10px 2px 10px;
+    border-radius:6px;
+    background:var(--violet)
+
+}
+#top-search{
+    border:none;
+}
+#cover-image{
+    background:rgb(243, 255, 192);
+    height:120px;
+}
+#profile-image{
+    background:pink;
+    height:150px;
+    width:150px;
+    margin:-70px auto 10px auto;
+    border-radius:50%;
+}
+#user-details{
+    width:50vw;
+    margin:5px auto;
+}
+#user-details h4,#user-details h2{
+    text-align:center
+}
+#user-details h4{
+    margin-top:3px;
+    opacity:0.8
+}
+#user-edit{
+    display:flex;
+    justify-content: center;
+}
+#user-edit button{
+    padding:5px 10px;
+    font-size:0.8rem;
+    border-radius:6px;
+    margin-top:5px;
+    background-color: var(--violet);
+}
+#participation{
+    display:flex;
+    justify-content:flex-start;
+    margin:30px auto;
+}
+#participation>h4{
+    margin-right:20px;
+    
+    
+}
+#buttons-div{
+    display:flex;
+    justify-content:space-between;
+}
+#buttons-div button{
+    font-weight:bold;
+    border:none;
+}
+#fol1,#fol2,#fol3,#fol4{
+    font-size:0.9rem;
+    opacity:0.7
+}
+
+#messages-div,#replies-div,#notifications-div{
+    display:none;
+}
+.switch-divs{
+    height:auto;
+    padding:15px 10px 10px 10px;
+    
+}
+
+#rooms-div{
+    background: var(--black);
+    color:var(--white);
+    padding:15px 10px 10px 10px
+}
+#rooms-div>div{
+    border-radius: 8px;
+    background-color:var(--dark);
+    box-shadow:2px 2px grey
+}
+#rooms-div h4,#rooms-div h5{
+    margin-left:3px;
+    margin-top:5px;
+}
+.host_profile_name{
+    text-align:center;
+    opacity:0.8;
+}
+.switch-divs>div{
+    margin:10px 0px;
+    padding-left:5px;
+}
+.host_profile_pic{
+    width:50px;
+    height:50px;
+    background:aqua;
+    border-radius:50%;
+    margin:3px auto;
+}
+.host_profile_name{
+    margin:10px auto;
+}
+.room-link{
+    text-align:center;
+}
+#roomlink{
+    color:var(--white);
+    text-decoration:none;
+    color:var(--blue)
+}
+
+#messages-div{
+    color:white;
+    background-color:var(--black)
+}
+#messages-div>div{
+    background: #140d30;
+    border-radius: 8px;
+    box-shadow:2px 2px grey;
+}
+#replies-div{
+    background-color: var(--black);
+    /* box-shadow:2px 2px grey; */
+    color:var(--white)
+}
+#replies-div>div{
+    border-radius:8px;
+    background:#140d30;
+    box-shadow:2px 2px grey;
+}
+#reply-link{
+    color:var(--blue);
+    text-decoration:none;
+}
+#notifications-div{
+    background:var(--black);
+    color:white;
+}
+#notifications-div>h2{
+    text-align:center;
+}
+#note-main{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    grid-template-rows:auto;
+    background:var(--dark);
+    border-radius: 8px;
+    box-shadow:2px 2px grey
+}
+#notee-div2{
+    margin-left:10px;
+    display:flex;
+    flex-direction: column;
+    justify-content:flex-start;
+}
+#buttons-div>button{
+    color:white;
+    padding:5px 15px 5px 15px;
+    border-radius:8px;
+    border:1px solid var(--violet);
+    background:none;
+    box-shadow:2px 1px white;
+}
+.top-links{
+    text-decoration:none;
+    color:var(--white)
+}
+#homeview{
+    margin-left:5px
+}
+#logoutview{
+    margin-right:5px;
+}
+#profile-logout{
+    color:var(--white);
+    text-decoration:none;
+}
+#mini-name{
+    text-align:center;
+    margin-top:5px;
+}
+@media screen and (max-width:550px){
+    #host_profile_pic{
+        width:45px;
+        height:45px;
+    }
+    #search-bar>form{
+        display:flex;
+        justify-content: space-around;
+        width:90vw;
+    }
+    #search-bar>form>input{
+        height:4.5vh;
+    }
+    #cover-image{
+        height:180px;
+    }
+}

@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'search2.css'%} ">
+    <title>Document</title>
+</head>
+<body>
+    <div id="header">
+        <h3><a href="/profile-view/{{user.profile.slug}}" id="back-link">Back</a></h3>
+        <div id="profile-pic"><img src="{{user.profile.image.url}}" alt=""></div>
+    </div>
+    {% if result.count > 0%}
+    <h3 id="display">Related Profiles :{{result.count}}</h3>
+    {% for profile in result %}
+    <div id="message">
+        <div class="message-pic">
+            <div id="real-pic"><img src="{{profile.profile.image.url}}" alt=""></div>
+        </div>
+        <div id="content">
+            <h3><a href="/profile-view/{{profile.profile.slug}}" id="user-name">{{profile.username}}</a></h3>
+            <h4>{{profile.first_name}} {{profile.last_name}}</h4>
+        </div>
+    </div>
+    {%endfor%}
+    {%else%}
+    <h3 id="display">No Result Match </h3>
+    {%endif%}
+</body>
