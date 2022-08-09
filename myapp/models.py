@@ -4,15 +4,15 @@ from django.contrib.auth.models import User
 from . import helper
 
 # Create your models here.
-class Topic(models.Model):
-    name=models.CharField(max_length=20)
+# class Topic(models.Model):
+#     name=models.CharField(max_length=20)
   
     
-    class Meta:
-        ordering=("name",)
+    # class Meta:
+    #     ordering=("name",)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 class Room(models.Model):       
     name=models.CharField(max_length=1000)
